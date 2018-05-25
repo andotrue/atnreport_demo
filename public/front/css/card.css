@@ -1,0 +1,155 @@
+/*------------------------------------------
+  page-card
+------------------------------------------*/
+.cmn-block-top {
+  background: url(/front/images/common/patt04.png) repeat; }
+
+.page-top-visual {
+  height: 400px;
+  background-color: #b6e1f6;
+  background-image: url(/front/images/common/visual-card.png); }
+
+.cmn-block-detail .cmn-block-title {
+  margin-bottom: 0 !important; }
+
+.cmn-block-detail .page-title-wrapper {
+  background: #b6e1f6; }
+
+.cmn-block-detail .page-title {
+  display: table;
+  width: 400px;
+  margin: 0 auto;
+  padding: 20px 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  .cmn-block-detail .page-title .title-icon {
+    display: table-cell;
+    vertical-align: middle;
+    width: 32%; }
+  .cmn-block-detail .page-title .title-text {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    font-size: 2rem; }
+
+.cmn-block-detail .block-contents {
+  position: relative;
+  padding-top: 30px; }
+  .cmn-block-detail .block-contents:before {
+    content: "";
+    width: 33%;
+    height: 100%;
+    background: url(/front/images/common/patt04.png) repeat;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1; }
+
+.point-about .box {
+  margin-bottom: 50px; }
+  .point-about .box .txt01 {
+    font-weight: bold;
+    font-size: 16px;
+    font-size: 1.6rem;
+    margin-bottom: 15px; }
+    .point-about .box .txt01 span {
+      display: inline-block;
+      vertical-align: middle; }
+    .point-about .box .txt01 .mark {
+      font-size: 22px;
+      font-size: 2.2rem;
+      padding-right: 10px;
+      padding-right: 10px; }
+    .point-about .box .txt01 .circle {
+      color: #e60012; }
+    .point-about .box .txt01 .cross {
+      padding-left: 25px; }
+  .point-about .box .ttl {
+    font-weight: bold;
+    background: #e6e6e6;
+    text-align: center;
+    font-size: 16px;
+    font-size: 1.6rem;
+    padding: 10px;
+    margin-bottom: 30px; }
+
+.point-about table {
+  width: 100%;
+  border-top: 1px solid #aaaaa9;
+  border-left: 1px solid #aaaaa9; }
+  .point-about table th, .point-about table td {
+    font-weight: bold;
+    text-align: center;
+    border-right: 1px solid #aaaaa9;
+    border-bottom: 1px solid #aaaaa9;
+    font-size: 16px;
+    font-size: 1.6rem;
+    padding: 14px;
+    vertical-align: middle;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+    .point-about table th span, .point-about table td span {
+      color: #e60012;
+      font-size: 14px;
+      font-size: 1.4rem; }
+    .point-about table th:first-child, .point-about table td:first-child {
+      background: #f4f5f4; }
+  .point-about table td img {
+    max-width: 100%; }
+
+@media screen and (max-width: 760px) {
+  .page-top-visual {
+    height: 300px;
+    -webkit-background-size: 480px;
+    -o-background-size: 480px;
+    background-size: 480px; }
+  .point-about .box {
+    margin-bottom: 30px; }
+    .point-about .box .txt01 {
+      font-size: 13px;
+      font-size: 1.3rem;
+      margin-bottom: 10px; }
+      .point-about .box .txt01 .mark {
+        font-size: 16px;
+        font-size: 1.6rem; }
+      .point-about .box .txt01 .cross {
+        padding-left: 20px; }
+    .point-about .box .ttl {
+      font-size: 14px;
+      font-size: 1.4rem;
+      padding: 10px;
+      margin-bottom: 15px; }
+  .point-about table th, .point-about table td {
+    font-size: 12px;
+    font-size: 1.2rem;
+    padding: 10px; }
+    .point-about table th span, .point-about table td span {
+      font-size: 11px;
+      font-size: 1.1rem; } }
+
+@media screen and (max-width: 480px) {
+  .cmn-block-top {
+    -webkit-background-size: 20px;
+    -o-background-size: 20px;
+    background-size: 20px; }
+  .page-top-visual {
+    height: 200px;
+    -webkit-background-size: 320px;
+    -o-background-size: 320px;
+    background-size: 320px; }
+  .cmn-block-detail .page-title {
+    width: 100%;
+    padding: 10px; }
+    .cmn-block-detail .page-title .title-text {
+      font-size: 18px;
+      font-size: 1.8rem; }
+  .cmn-block-detail .block-contents {
+    padding-top: 15px; }
+    .cmn-block-detail .block-contents:before {
+      -webkit-background-size: 20px;
+      -o-background-size: 20px;
+      background-size: 20px; } }
