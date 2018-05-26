@@ -14,6 +14,7 @@
 //認証周りを有効にする
 Auth::routes();
 
+//////////////////ツール
 Route::get('/tool/login', 'Auth\LoginController@showLoginForm');
 Route::group(['middleware' => 'auth.tool'], function()
 {
@@ -23,7 +24,7 @@ Route::group(['middleware' => 'auth.tool'], function()
 	Route::resource("tool/user","Tool\UserController");
 	Route::get("tool/information/copy/{id}","Tool\InformationController@copy");
 	Route::resource("tool/information","Tool\InformationController");
-	
+
 	Route::resource("tool/store","Tool\StoreController");
 	Route::resource("tool/image","Tool\ImageController");
 
@@ -31,23 +32,16 @@ Route::group(['middleware' => 'auth.tool'], function()
 	Route::any("tool/accesslog/forstore/","Tool\AccesslogController@forStore");
 	Route::resource("tool/accesslog","Tool\AccesslogController");
 });
-//Route::resource("tool/user","Tool\UserController");
-//Route::resource("tool/information","Tool\InformationController");
-//Route::resource("tool/store","Tool\StoreController");
 
+
+//////////////////フロント
 Route::get('/front/login', 'Auth\LoginController@showLoginForm');
 
+//フロントページ　静的ページ
+// /static/hoge
 Route::get('static/{page?}', function($page = 'index') {
 	return view('front/static/'.$page);
 })->middleware('auth.front');
 
-/*
-Route::get('real/{page?}', function($page = 'index') {
-	return view('front/real/'.$page);
-})->middleware('auth.front');
-Route::get('real/movie/{page?}', function($page = 'index') {
-	return view('front/real/movie/'.$page);
-})->middleware('auth.front');
-*/
-
+//フロントページ　/以下
 Route::get('/{dir?}/{subdir?}/{page?}', 'Front\MainController@index')->middleware('auth.front');

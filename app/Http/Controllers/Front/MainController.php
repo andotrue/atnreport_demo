@@ -21,11 +21,14 @@ class MainController extends Controller {
 	{
 		$path = \Request::path();
 
-		////$gaData = $this->getGaResult();
-		////if(is_null($gaData)) $gaData = array();
-		////$searchpath = ($path != "/")? "/".$path : $path;
-		////$pvCount = 0;
-		////$pvCount = @$gaData[$searchpath];
+		 /*
+		//GA関連処理
+		$gaData = $this->getGaResult();
+		if(is_null($gaData)) $gaData = array();
+		$searchpath = ($path != "/")? "/".$path : $path;
+		$pvCount = 0;
+		$pvCount = @$gaData[$searchpath];
+        */
 
 		$message = "(DEBUG!)" . __CLASS__ . "---->" . __FUNCTION__ . ":" . __LINE__;
 		$message .= "$dir/$subdir/$page  $path";
@@ -35,38 +38,9 @@ class MainController extends Controller {
 
 		//TOPページ
 		if($path == "/"){
-		    /*
-			$informations = Information::where([
-											['open_flg', '=', 1],
-											['open_date', '<=', date('Y/m/d H:i:s')],
-										])
-										->where(function($query){
-											$query->where('close_date', '>=', date('Y/m/d H:i:s'))
-											->orWhereNull('close_date');
-										})
-							->orderBy('open_date', 'desc')
-							->orderBy('id', 'desc')
-							->paginate(3);
-            */
 			$stores_imgd = Store::orderBy('id')->pluck('imagedetail','id');
-            /*
-			$img_bnrs = ImageMst::where([
-										['open_flg', '=', 1],
-										['open_date', '<=', date('Y/m/d H:i:s')],
-										['category', '=', 1],
-									])
-									->where(function($query){
-										$query->where('close_date', '>=', date('Y/m/d H:i:s'))
-										->orWhereNull('close_date');
-									})
-							->orderBy('open_date', 'desc')
-							->orderBy('id', 'desc')
-							->get();
-            */
-			$img_bnrs = array();
-
 			//echo "<pre>"; var_dump(\DB::getQueryLog()); echo "</pre>";
-
+			$img_bnrs = array();
 			$this->data = compact('informations','stores_imgd','img_bnrs');
 		}
 		//お知らせ　TOPページ
@@ -84,7 +58,7 @@ class MainController extends Controller {
 							->paginate(10);
 
 			$stores_imgd = Store::orderBy('id')->pluck('imagedetail','id');
-				
+
 			$this->data = compact('informations','stores_imgd');
 		}
 		//お知らせ 詳細ページ
@@ -155,8 +129,9 @@ class MainController extends Controller {
 			//echo "card";
 		}
 
+		//GA関連処理
 		////$this->data['pvCount'] = $pvCount;
-		//if($dir == null && $page == null)
+
 		return view("front.$dir.$subdir.$page", $this->data);
 	}
 

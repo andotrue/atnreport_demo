@@ -37,10 +37,10 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-    	$message = "(DEBUG!)" . __FILE__ . "---->" . __FUNCTION__ . ":" . __LINE__;
-    	logger($message);
+        	$message = "(DEBUG!)" . __FILE__ . "---->" . __FUNCTION__ . ":" . __LINE__;
+        	logger($message);
 
-    	//$this->authenticate();
+        	//$this->authenticate();
         $this->middleware('guest', ['except' => 'logout']);
     }
 
@@ -57,6 +57,9 @@ class LoginController extends Controller
     //vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php
     public function showLoginForm()
     {
+        $message = "(DEBUG!)" . __FILE__ . "---->" . __FUNCTION__ . ":" . __LINE__;
+        logger($message);
+
         $stores = Store::orderBy('id')->pluck('storename','id');
 
         $all_storeId = @array_search('全施設', $stores->toArray());
@@ -84,14 +87,14 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-    	echo $referer = $request->headers->get('referer');
-    	$referers = parse_url($referer);
-    	$path = $referers['path'];
-    	if(!preg_match('/^\/tool*/', $path)) $this->redirectTo = "/";
+        	echo $referer = $request->headers->get('referer');
+        	$referers = parse_url($referer);
+        	$path = $referers['path'];
+        	if(!preg_match('/^\/tool*/', $path)) $this->redirectTo = "/";
 
-    	$this->guard()->logout();
-    	$request->session()->flush();
-    	$request->session()->regenerate();
-    	return redirect($this->redirectTo);
+        	$this->guard()->logout();
+        	$request->session()->flush();
+        	$request->session()->regenerate();
+        	return redirect($this->redirectTo);
     }
 }

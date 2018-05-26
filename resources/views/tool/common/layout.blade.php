@@ -49,7 +49,7 @@
                 </button>
                 @if (isset($all_store_logo))
                 <div class="col-md-4 col-xs-4">
-                    <img class='img-thumbnail' src='/img/store/{{ $all_store_logo }}'>
+                    <!-- <img class='img-thumbnail' src='/img/store/{{ $all_store_logo }}'> -->
                 </div>
                 <div class="col-md-8 col-xs-8">
                 <a class="navbar-brand" href="/tool">

@@ -66,11 +66,11 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-    	'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        	'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
-    	'auth.tool' => \App\Http\Middleware\AuthenticatedTool::class,
-    	'redauth.tool' => \App\Http\Middleware\RedirectIfAuthenticatedTool::class,
-    	'auth.front' => \App\Http\Middleware\AuthenticatedFront::class,
-    	'redauth.front' => \App\Http\Middleware\RedirectIfAuthenticatedFront::class,
+        	'auth.tool' => \App\Http\Middleware\AuthenticatedTool::class,
+        	'redauth.tool' => \App\Http\Middleware\RedirectIfAuthenticatedTool::class,
+        	'auth.front' => \App\Http\Middleware\AuthenticatedFront::class,
+        	'redauth.front' => \App\Http\Middleware\RedirectIfAuthenticatedFront::class,
     ];
 }
