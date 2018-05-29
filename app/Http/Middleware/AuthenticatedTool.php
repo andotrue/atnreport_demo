@@ -42,34 +42,35 @@ class AuthenticatedTool
     {
         $this->authenticate($guards);
 
-        //var_dump($this->auth->check());
+		$message = "(DEBUG!)" . __CLASS__ . "---->" . __FUNCTION__ . "[" . __LINE__ . "]";
+		$message.= $this->auth->user()->role;
+		logger($message);		
+        
         if($this->auth->check()){
-
-            //var_dump($this->auth->user()->role);
             //admin権限, store権限なら
             if($this->auth->user()->role == "admin" || $this->auth->user()->role == "store"){
                 //store権限なら
                 if($this->auth->user()->role == "store"){
-    	        		$path = \Request::path();
-    	        		//var_dump($path);
+	        		$path = \Request::path();
 
-    	        		//ページが施設管理ならツールTOPに
-    	        		if(preg_match("/^tool\/store.*/", $path)){
-    	        			//var_dump($path);
-    		    			return redirect('/tool');
-    		    			exit;
-    	        		}
-    	        		//ページが画像管理ならツールTOPに
-    	        		if(preg_match("/^tool\/image.*/", $path)){
-    	        			//var_dump($path);
-    		    			return redirect('/tool');
-    		    			exit;
-            			}
-            		}
+	        		$message = "(DEBUG!)" . __CLASS__ . "---->" . __FUNCTION__ . "[" . __LINE__ . "]";
+	        		$message.= "path : $path";
+	        		logger($message);
+	        		
+	        		//ページが施設管理なら
+	        		if(preg_match("/^tool\/store.*/", $path)){
+		    			return redirect('/tool');
+		    			exit;
+	        		}
+	        		//ページが画像管理なら
+	        		if(preg_match("/^tool\/image.*/", $path)){
+		    			return redirect('/tool');
+		    			exit;
+        			}
+        		}
 
-            		$stores = Store::orderBy('id')->pluck('storename','id');
-                //var_dump($stores);
-            		$user_store = @$stores[$this->auth->user()->store_id];
+        		$stores = Store::orderBy('id')->pluck('storename','id');
+        		$user_store = @$stores[$this->auth->user()->store_id];
 
                 $all_storeId = @array_search('全施設', $stores->toArray());
                 $stores_imgd = Store::orderBy('id')->pluck('imagedetail','id');
@@ -77,16 +78,15 @@ class AuthenticatedTool
                 $all_store_logo = json_decode($all_store_logo, true);
                 $all_store_logo = $all_storeId . "/" . @$all_store_logo[0]['filename'];
 
-            		\View::share('user_store', $user_store);
+        		\View::share('user_store', $user_store);
                 \View::share('all_store_logo', $all_store_logo);
-            	}
-            	//店舗権限の場合
-            	else{
-            		//フロントTOPにリダイレクトします。
-            		echo "権限エラー";
-        		    	return redirect('/');
-        		    	exit;
-            	}
+            }
+        	//user権限の場合
+        	else{
+        		//フロントTOPにリダイレクトします。
+		    	return redirect('/');
+		    	exit;
+        	}
         }
 
         return $next($request);
