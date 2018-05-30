@@ -18,14 +18,29 @@ Auth::routes();
 Route::get('/tool/login', 'Auth\LoginController@showLoginForm');
 Route::group(['middleware' => 'auth.tool'], function()
 {
-	Route::get('/tool', 'HomeController@index');
-	Route::post("tool/user/testmailaddress_add/","Tool\UserController@testmailaddress_add");
-	Route::get("tool/user/testmailaddress_del/{id}","Tool\UserController@testmailaddress_del");
-	Route::resource("tool/user","Tool\UserController");
+    //ツールTOP
+    Route::get('/tool', 'HomeController@index');
+
+    //CSVインポート
+    Route::resource("tool/csvimport","Tool\CsvimportController");
+    
+    //テストメールアドレス追加
+    Route::post("tool/user/testmailaddress_add/","Tool\UserController@testmailaddress_add");
+    //テストメールアドレス削除
+    Route::get("tool/user/testmailaddress_del/{id}","Tool\UserController@testmailaddress_del");
+
+    //ユーザ管理
+    Route::resource("tool/user","Tool\UserController");
+    
+    //お知らせ管理　コピー機能
 	Route::get("tool/information/copy/{id}","Tool\InformationController@copy");
+    //お知らせ管理
 	Route::resource("tool/information","Tool\InformationController");
 
+    //施設管理
 	Route::resource("tool/store","Tool\StoreController");
+
+    //画像管理
 	Route::resource("tool/image","Tool\ImageController");
 
 	Route::any("tool/accesslog/forcontents/{no}","Tool\AccesslogController@forContents");

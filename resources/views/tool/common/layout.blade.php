@@ -99,7 +99,7 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li id="informationlink" class="{{ preg_match("/^\/tool\/csvinport*/", $_SERVER['REQUEST_URI'])? " active " : ""}}">
-                    	<a href="/tool/csvinport">CSVインポート</a>
+                    	<a href="/tool/csvimport">CSVインポート</a>
                     </li>
                     <li id="informationlink" class="{{ preg_match("/^\/tool\/information*/", $_SERVER['REQUEST_URI'])? " active " : ""}}">
                     	<a href="/tool/information">お知らせ管理</a>
