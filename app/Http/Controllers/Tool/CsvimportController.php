@@ -46,7 +46,7 @@ class CsvimportController extends Controller {
 
 		$this->setFunctionName();
 
-		return view('tool.user.index', $this->data);
+		return view('tool.csvimport.index', $this->data);
 	}
 
 	/**
