@@ -2,17 +2,16 @@
 @extends('tool.common.layout')
 
 @section('css')
-	<link href="/css/jquery.dataTables/jquery.dataTables.min.css" rel="stylesheet">
-	<link href="/css/jquery.dataTables/dataTables.bootstrap.css" rel="stylesheet">
-	<link href="/css/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="/css/jquery.filthypillow/jquery.filthypillow.css" />
+	<!-- 
+	<link type="text/css"  rel="stylesheet"href="//cdn.quilljs.com/1.0.6/quill.snow.css" />
+	<link type="text/css"  rel="stylesheet"href="//cdn.quilljs.com/1.0.6/quill.bubble.css" />
+	<link type="text/css"  rel="stylesheet"href="//cdn.quilljs.com/1.0.6/quill.core.css" />
+	 -->
+
+	<!--<link href="/jQuery.filer-1.3.0/css/jquery.filer.css" rel="stylesheet"> -->
 	<link type="text/css" rel="stylesheet" href="/css/jquery.filer/jquery.filer.css" />
 	<link type="text/css" rel="stylesheet" href="/css/jquery.filer/jquery.filer-dragdropbox-theme.css" />
-
-	<style>
-	tbody:hover {
-	    cursor: move;
-	}
-	</style>
 @endsection
 
 @section('header')
@@ -25,33 +24,30 @@
 @endsection
 
 @section('content')
+    @include('error')
     <div class="row">
- 		<form action="{{ route('image.store') }}" method="POST" enctype="multipart/form-data">
-			<input type="hidden" name="_token" value="{{ csrf_token() }}">
+ 		<form action="{{ route('csvimport.store') }}" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="_token" value="{{ csrf_token() }}">
  
         <div class="col-md-12">
-        
 			<?php 
-			$cnt = 1;
+			$cnt = 1;//FILEアップローダフィールドの数
 			for($i=1; $i<=$cnt; $i++){
 			?>
-			<div class="form-group @if($errors->has("image".$i)) has-error @endif">
-			   <label for="image<?php echo $i; ?>-field">アップロードするファイルを選択してください。<span class="btn-xs btn-danger">必須</span></label>
-			      <input type="file" name="image<?php echo $i; ?>" id="filer_input<?php echo $i; ?>" multiple="multiple" required >
-			       @if($errors->has("image".$i))
-			        <span class="help-block">{{ $errors->first("image$i") }}</span>
+			<div class="form-group @if($errors->has("csvfile".$i)) has-error @endif">
+			   <label for="csvfile<?php echo $i; ?>-field">アップロードするファイルを選択してください。<span class="btn-xs btn-danger">必須</span></label>
+			      <input type="file" name="csvfile<?php echo $i; ?>" id="filer_input<?php echo $i; ?>" multiple="multiple">
+			       @if($errors->has("csvfile".$i))
+			        <span class="help-block">{{ $errors->first("csvfile$i") }}</span>
 			       @endif
 			</div>
-			<?php 
-			}
-			?>
-        
+			<?php } ?>
         </div>
         
 		<div class='col-md-12'>       
 			<div class="well well-sm">
-			    <button type="submit" class="btn btn-primary">作成</button>
-			    <a class="btn btn-link pull-right" href="{{ route('image.index') }}"><span class="glyphicon glyphicon-backward"></span> 戻る</a>
+			    <button type="submit" class="btn btn-primary">アップロード</button>
+			    <a class="btn btn-link pull-right" href="{{ route('csvimport.index') }}"><span class="glyphicon glyphicon-backward"></span> 戻る</a>
 			</div>
 		</div>
 		</form>
@@ -61,29 +57,29 @@
 
 
 @section('scripts')
-	<script src="/js/jquery.dataTables/jquery.dataTables.min.js"></script>
-	<script src="/js/jquery.dataTables/dataTables.bootstrap.js"></script>
-	<script src="/js/jquery-ui/jquery-ui.min.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="/js/moment.js"></script>
+	<script charset="UTF-8" type="text/javascript" src="/js/jquery.filthypillow/jquery.filthypillow_custom.js"></script>
+
 	<script src="/js/jqueryfiler/jquery.filer.min.js" type="text/javascript"></script>
 
 	<!-- -------------------------------画像-->
 	<script type="text/javascript">
 	$(document).ready(function() {
 		<?php 
-			$cnt = 1;
+			$cnt = 0;//FILEアップローダフィールドの数
 			for($i=1; $i<=$cnt; $i++){
 		?>
 		    $('#filer_input<?php echo $i; ?>').filer({
 			    //limit: 3,
 			    maxSize: 3,
 			    //addMore: true,
-			    extensions: ['jpg','jpeg','png','gif'],
+			    extensions: ['csv'],
 			    //changeInput: true,
 			    showThumbs: true,
 				captions: {
 					removeConfirmation: "削除します。よろしいですか？",
 					errors: {
-						filesType: "ファイル形式は、jpg,jpeg,png,gifファイルのみです。",
+						filesType: "ファイル形式は、csvファイルのみです。",
 					}
 				},
 				//onRemove: false,

@@ -10,12 +10,12 @@ use Illuminate\Http\Request;
 
 class CsvimportController extends Controller {
 
-	public $functionName = "CSVã‚¤ãƒ³ãƒãƒ¼ãƒˆç®¡ç†";
+	public $functionName = "CSV¥¤¥ó¥Ý©`¥È¹ÜÀí";
 	public $functionSubName = "";
 
 	public function __construct()
 	{
-		//èªè¨¼ã‚’ã•ã›ã‚‹å ´åˆ
+		//ÕJÔ^¤ò¤µ¤»¤ëˆöºÏ
 		//$this->middleware('auth.tool');
 	}
 
@@ -59,7 +59,7 @@ class CsvimportController extends Controller {
 		$stores = Store::orderBy('id')->pluck('storename','id');
 		$this->data = compact('stores');
 
-		$this->functionSubName = "ä½œæˆ";
+		$this->functionSubName = "×÷³É";
 		$this->setFunctionName();
 
 		return view('tool.user.create', $this->data);
@@ -73,17 +73,41 @@ class CsvimportController extends Controller {
 	 */
 	public function store(Request $request)
 	{
-		// 'alpha_num_custom'ã¯
-		// app/Providers/AppServiceProvider.php
-		// å®šç¾©
-		$rules = [
-			'name' => 'required|between:5,10|alpha_num_custom|unique:users',
-			'email' => 'email|max:100',
-			'password' => 'required|min:5|confirmed',
-			'role' => 'required',
-			'store_id' => 'required',
-			'shop_name' => 'max:100',
-		];
+		/*
+
+        $this->validate($request, [
+            //'csvfile1' => 'required|mimes:csv|max:1000'
+            'csvfile1' => 'required|max:1000'
+        ]);
+        $file = $request->file('csvfile1');
+        $reader = \Excel::load($file->getRealPath())->get();
+        exit;
+        */
+
+
+		//¥¢¥Ã¥×¥í©`¥É¥Õ¥¡¥¤¥ë¤ËŒ¤·¤Æ¤Î¥Ð¥ê¥Ç©`¥È
+        $validator = $this->validateUploadFile($request);
+        if ($validator->fails() === true){
+			return redirect()->route('csvimport.index')->with('errors', $validator->errors());
+        }
+
+        //CSV¥Õ¥¡¥¤¥ë¤ò¥µ©`¥Ð©`¤Ë±£´æ
+        $temporary_csv_file = $request->file('csvfile1')->store('csv');
+        var_dump($temporary_csv_file);
+
+        $fp = fopen(storage_path('app/') . $temporary_csv_file, 'r');
+        var_dump($fp);
+
+        // Ò»ÐÐÄ¿£¨¥Ø¥Ã¥À£©Õi¤ßÞz¤ß
+        $headers = fgetcsv($fp);
+        var_dump($headers);
+        exit;
+
+
+
+
+
+
 
 		$this->validate($request, $rules);
 
@@ -101,7 +125,40 @@ class CsvimportController extends Controller {
 		return redirect()->route('user.index')->with('message', 'Item created successfully.');
 	}
 
-	/**
+    /**
+     * ¥¢¥Ã¥×¥í©`¥É¥Õ¥¡¥¤¥ë¤Î¥Ð¥ê¥Ç©`¥È
+     * £¨¡ù±¾À´¤ÏFormRequestClass¤ÇÐÐ¤¦¤Ù¤­£©
+     *
+     * @param Request $request
+     * @return Illuminate\Validation\Validator
+     */
+    private function validateUploadFile(Request $request)
+    {
+        return \Validator::make($request->all(), [
+                'csvfile1' => 'required|file|mimetypes:text/plain|mimes:csv,txt',
+            ], [
+                'csvfile1.required'  => '¥Õ¥¡¥¤¥ë¤òßx’k¤·¤Æ¤¯¤À¤µ¤¤¡£',
+                'csvfile1.file'      => '¥Õ¥¡¥¤¥ë¥¢¥Ã¥×¥í©`¥É¤ËÊ§”¡¤·¤Þ¤·¤¿¡£',
+                'csvfile1.mimetypes' => '¥Õ¥¡¥¤¥ëÐÎÊ½¤¬²»Õý¤Ç¤¹¡£',
+                'csvfile1.mimes'     => '¥Õ¥¡¥¤¥ë’ˆˆ×Ó¤¬®¤Ê¤ê¤Þ¤¹¡£',
+            ]
+        );
+    }
+
+    /**
+     * ¥Ð¥ê¥Ç©`¥·¥ç¥ó¤Î¶¨Áx
+     *
+     * @return array
+     */
+    private function defineValidationRules()
+    {
+        return [
+            // CSV¥Ç©`¥¿ÓÃ¥Ð¥ê¥Ç©`¥·¥ç¥ó¥ë©`¥ë
+            'content' => 'required',
+        ];
+    }
+
+    /**
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
@@ -130,7 +187,7 @@ class CsvimportController extends Controller {
 		$stores = Store::orderBy('id')->pluck('storename','id');
 
 		$this->data = compact('user','stores');
-		$this->functionSubName = "ç·¨é›†";
+		$this->functionSubName = "¾Ž¼¯";
 		$this->setFunctionName();
 
 		return view('tool.user.edit', $this->data);
@@ -200,7 +257,7 @@ class CsvimportController extends Controller {
 	}
 
 	/*
-	 * ãƒ†ã‚¹ãƒˆãƒ¡ãƒ¼ãƒ«å®›å…ˆè¿½åŠ 
+	 * ¥Æ¥¹¥È¥á©`¥ëÍðÏÈ×·¼Ó
 	 */
 	public function testmailaddress_add(Request $request)
 	{
@@ -256,7 +313,7 @@ class CsvimportController extends Controller {
 	
 	
 	/*
-	 * ãƒ†ã‚¹ãƒˆãƒ¡ãƒ¼ãƒ«å®›å…ˆå‰Šé™¤
+	 * ¥Æ¥¹¥È¥á©`¥ëÍðÏÈÏ÷³ý
 	 */
 	public function testmailaddress_del($id)
 	{
