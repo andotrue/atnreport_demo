@@ -10,13 +10,13 @@ use Illuminate\Http\Request;
 
 class CsvimportController extends Controller {
 
-	public $functionName = "CSV¥¤¥ó¥İ©`¥È¹ÜÀí";
+	public $functionName = "CSVã‚¤ãƒ³ãƒãƒ¼ãƒˆç®¡ç†";
 	public $functionSubName = "";
 
 	public function __construct()
 	{
-		//ÕJÔ^¤ò¤µ¤»¤ëˆöºÏ
-		//$this->middleware('auth.tool');
+	    //èªè¨¼ã‚’ã•ã›ã‚‹å ´åˆ
+	    //$this->middleware('auth.tool');
 	}
 
 	public function setFunctionName()
@@ -41,7 +41,7 @@ class CsvimportController extends Controller {
 		$stores = Store::orderBy('id')->pluck('storename','id');
 		//$testmailaddress = Testmailaddress::orderBy('id')->pluck('email','id');
 		//var_dump($testmailaddress);
-		
+
 		$this->data = compact('users','stores','testmailaddress');
 
 		$this->setFunctionName();
@@ -59,7 +59,7 @@ class CsvimportController extends Controller {
 		$stores = Store::orderBy('id')->pluck('storename','id');
 		$this->data = compact('stores');
 
-		$this->functionSubName = "×÷³É";
+		$this->functionSubName = "ä½œæˆ";
 		$this->setFunctionName();
 
 		return view('tool.user.create', $this->data);
@@ -73,32 +73,18 @@ class CsvimportController extends Controller {
 	 */
 	public function store(Request $request)
 	{
-		/*
-
-        $this->validate($request, [
-            //'csvfile1' => 'required|mimes:csv|max:1000'
-            'csvfile1' => 'required|max:1000'
-        ]);
-        $file = $request->file('csvfile1');
-        $reader = \Excel::load($file->getRealPath())->get();
-        exit;
-        */
-
-
-		//¥¢¥Ã¥×¥í©`¥É¥Õ¥¡¥¤¥ë¤ËŒ¤·¤Æ¤Î¥Ğ¥ê¥Ç©`¥È
+	    // ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã«å¯¾ã—ã¦ã®ãƒãƒªãƒ‡ãƒ¼ãƒˆ
         $validator = $this->validateUploadFile($request);
         if ($validator->fails() === true){
 			return redirect()->route('csvimport.index')->with('errors', $validator->errors());
         }
 
-        //CSV¥Õ¥¡¥¤¥ë¤ò¥µ©`¥Ğ©`¤Ë±£´æ
+        // CSVãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚µãƒ¼ãƒãƒ¼ã«ä¿å­˜
         $temporary_csv_file = $request->file('csvfile1')->store('csv');
-        var_dump($temporary_csv_file);
 
         $fp = fopen(storage_path('app/') . $temporary_csv_file, 'r');
-        var_dump($fp);
 
-        // Ò»ĞĞÄ¿£¨¥Ø¥Ã¥À£©Õi¤ßŞz¤ß
+        // ä¸€è¡Œç›®ï¼ˆãƒ˜ãƒƒãƒ€ï¼‰èª­ã¿è¾¼ã¿
         $headers = fgetcsv($fp);
         var_dump($headers);
         exit;
@@ -126,34 +112,28 @@ class CsvimportController extends Controller {
 	}
 
     /**
-     * ¥¢¥Ã¥×¥í©`¥É¥Õ¥¡¥¤¥ë¤Î¥Ğ¥ê¥Ç©`¥È
-     * £¨¡ù±¾À´¤ÏFormRequestClass¤ÇĞĞ¤¦¤Ù¤­£©
-     *
-     * @param Request $request
-     * @return Illuminate\Validation\Validator
+     * ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒªãƒ‡ãƒ¼ãƒˆ
      */
     private function validateUploadFile(Request $request)
     {
         return \Validator::make($request->all(), [
                 'csvfile1' => 'required|file|mimetypes:text/plain|mimes:csv,txt',
             ], [
-                'csvfile1.required'  => '¥Õ¥¡¥¤¥ë¤òßx’k¤·¤Æ¤¯¤À¤µ¤¤¡£',
-                'csvfile1.file'      => '¥Õ¥¡¥¤¥ë¥¢¥Ã¥×¥í©`¥É¤ËÊ§”¡¤·¤Ş¤·¤¿¡£',
-                'csvfile1.mimetypes' => '¥Õ¥¡¥¤¥ëĞÎÊ½¤¬²»Õı¤Ç¤¹¡£',
-                'csvfile1.mimes'     => '¥Õ¥¡¥¤¥ë’ˆˆ×Ó¤¬®¤Ê¤ê¤Ş¤¹¡£',
+                'csvfile1.required'  => 'ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚',
+                'csvfile1.file'      => 'ãƒ•ã‚¡ã‚¤ãƒ«ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ã¾ã—ãŸã€‚',
+                'csvfile1.mimetypes' => 'ãƒ•ã‚¡ã‚¤ãƒ«å½¢å¼ãŒä¸æ­£ã§ã™ã€‚',
+                'csvfile1.mimes'     => 'ãƒ•ã‚¡ã‚¤ãƒ«æ‹¡å¼µå­ãŒç•°ãªã‚Šã¾ã™ã€‚',
             ]
         );
     }
 
     /**
-     * ¥Ğ¥ê¥Ç©`¥·¥ç¥ó¤Î¶¨Áx
-     *
-     * @return array
+     * ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã®å®šç¾©
      */
     private function defineValidationRules()
     {
         return [
-            // CSV¥Ç©`¥¿ÓÃ¥Ğ¥ê¥Ç©`¥·¥ç¥ó¥ë©`¥ë
+            // CSVãƒ‡ãƒ¼ã‚¿ç”¨ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ«ãƒ¼ãƒ«
             'content' => 'required',
         ];
     }
@@ -173,25 +153,6 @@ class CsvimportController extends Controller {
 		$this->setFunctionName();
 
 		return view('tool.user.show', $this->data);
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		$user = User::findOrFail($id);
-		$stores = Store::orderBy('id')->pluck('storename','id');
-
-		$this->data = compact('user','stores');
-		$this->functionSubName = "¾¼¯";
-		$this->setFunctionName();
-
-		return view('tool.user.edit', $this->data);
-
 	}
 
 	/**
@@ -254,86 +215,5 @@ class CsvimportController extends Controller {
 		$user->delete();
 
 		return redirect()->route('user.index')->with('message', 'Item deleted successfully.');
-	}
-
-	/*
-	 * ¥Æ¥¹¥È¥á©`¥ëÍğÏÈ×·¼Ó
-	 */
-	public function testmailaddress_add(Request $request)
-	{
-		$result = array();
-
-		$email = $request->input("temail");
-		\Log::debug("testmailaddress_add debug:".$email);
-
-		$testmailaddress = Testmailaddress::where('email','=',$email);
-		\Log::debug(print_r(isset($testmailaddress->id), true));
-		
-		if(isset($testmailaddress)){
-			$result['status'] = 'error';
-			$result['message'] = 'email exist';
-
-			goto end;
-		}
-		else{
-			$rules = [
-				'temail' => 'required|email|max:100',
-			];
-
-			//$this->validate($request, $rules);
-			$validator = \Validator::make($request->all(),$rules);
-			
-			if ($validator->fails()) {
-				$errors = $validator->errors();
-				$err_msg = $errors->first('temail');
-				\Log::debug(print_r($err_msg,true));
-					
-				$result['status'] = 'error';
-				$result['message'] = $err_msg;
-					
-				goto end;
-			}
-		}
-		
-		$testmailaddress = new Testmailaddress();
-		$id = $testmailaddress->email = $email;
-		$testmailaddress->save();
-		
-		$result['status'] = 'success';
-		$result['id'] = $id;
-		$result['message'] = '';
-		$result['email'] = $email;
-		
-		
-		end:
-	
-		$result = json_encode($result);
-		return $result;
-	}
-	
-	
-	/*
-	 * ¥Æ¥¹¥È¥á©`¥ëÍğÏÈÏ÷³ı
-	 */
-	public function testmailaddress_del($id)
-	{
-		$result = array();
-
-		$testmailaddress = Testmailaddress::findOrFail($id);
-		if($testmailaddress){
-			if($testmailaddress->delete()){
-				$result['id'] = $id;
-				$result['status'] = 'success';
-			}
-			else{
-				$result['status'] = 'error';
-			}
-		}
-		else{
-			$result['status'] = 'error';
-		}
-		$result = json_encode($result);
-
-		return $result;
 	}
 }
