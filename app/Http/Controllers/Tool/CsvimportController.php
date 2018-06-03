@@ -87,6 +87,25 @@ class CsvimportController extends Controller {
         // 一行目（ヘッダ）読み込み
         $headers = fgetcsv($fp);
         var_dump($headers);
+
+        $column_names = [];
+
+        // CSVヘッダ確認
+        foreach ($headers as $header) {
+            $result = self::retrieveColumnsByValue($header, 'SJIS-win');
+            if ($result === null) {
+                fclose($fp);
+                \Storage::delete($temporary_csv_file);
+                return redirect('/tool/csvimport/')->with('message', '登録に失敗しました。CSVファイルのフォーマットが正しいことを確認してださい。');
+                //return redirect()->route('csvimport.index')->with('errors', '登録に失敗しました。CSVファイルのフォーマットが正しいことを確認してださい。');
+            }
+            $column_names[] = $result;
+        }
+
+        $registration_errors_list = [];
+        $update_errors_list       = [];
+        $i = 0;
+
         exit;
 
 
@@ -136,6 +155,30 @@ class CsvimportController extends Controller {
             // CSVデータ用バリデーションルール
             'content' => 'required',
         ];
+    }
+
+
+    /**
+     * CSVヘッダ項目の定義値があれば定義配列のkeyを返す
+     *
+     * @param string $header
+     * @param string $encoding
+     * @return string|null
+     */
+    public static function retrieveColumnsByValue(string $header ,string $encoding)
+    {
+        // CSVヘッダとテーブルのカラムを関連付けておく
+        $list = [
+            'content' => "内容",
+            'memo'    => "備考",
+        ];
+
+        foreach ($list as $key => $value) {
+            if ($header === mb_convert_encoding($value, $encoding)) {
+                return $key;
+            }
+        }
+        return null;
     }
 
     /**
