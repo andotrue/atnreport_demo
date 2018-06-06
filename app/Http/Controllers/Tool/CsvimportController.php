@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CsvimportController extends Controller {
 
-	public $functionName = "CSVインポート管理";
+	public $functionName = "CSVインポート";
 	public $functionSubName = "";
 
 	public function __construct()
@@ -46,6 +46,7 @@ class CsvimportController extends Controller {
 
 		$this->setFunctionName();
 
+		//var_dump($this->data);
 		return view('tool.csvimport.index', $this->data);
 	}
 
@@ -86,7 +87,7 @@ class CsvimportController extends Controller {
 
         // 一行目（ヘッダ）読み込み
         $headers = fgetcsv($fp);
-        var_dump($headers);
+        //var_dump($headers);exit;
 
         $column_names = [];
 
@@ -96,8 +97,7 @@ class CsvimportController extends Controller {
             if ($result === null) {
                 fclose($fp);
                 \Storage::delete($temporary_csv_file);
-                return redirect('/tool/csvimport/')->with('message', '登録に失敗しました。CSVファイルのフォーマットが正しいことを確認してださい。');
-                //return redirect()->route('csvimport.index')->with('errors', '登録に失敗しました。CSVファイルのフォーマットが正しいことを確認してださい。');
+                return redirect('/tool/csvimport/')->with('error', '登録に失敗しました。CSVファイルのフォーマットが正しいことを確認してださい。');
             }
             $column_names[] = $result;
         }
@@ -105,15 +105,64 @@ class CsvimportController extends Controller {
         $registration_errors_list = [];
         $update_errors_list       = [];
         $i = 0;
+		while ($row = fgetcsv($fp)) {
+	        //var_dump($row);
+	        $registration_list[] = $row;
 
-        exit;
+			// Excelで編集されるのが多いと思うのでSJIS-win→UTF-8へエンコード
+			mb_convert_variables('UTF-8', 'SJIS-win', $row);
+
+
+			/*
+			$is_registration_row = false;
+
+			foreach ($column_names as $column_no => $column_name) {
+					$is_registration_row = true;
+				}
+
+				// 新規登録か更新かのチェック
+				if($is_registration_row === true){
+					if ($column_name !== 'id') {
+						$registration_csv_list[$i][$column_name] = $row[$column_no] === '' ? null : $row[$column_no];
+					}
+				} else {
+					$update_csv_list[$i][$column_name] = $row[$column_no] === '' ? null : $row[$column_no];
+				}
+			}
+
+			// バリデーションチェック
+			$validator = \Validator::make(
+				$is_registration_row === true ? $registration_csv_list[$i] : $update_csv_list[$i],
+				$this->defineValidationRules(),
+				$this->defineValidationMessages()
+			);
+
+			if ($validator->fails() === true) {
+				if ($is_registration_row === true) {
+					$registration_errors_list[$i + 2] = $validator->errors()->all();
+				} else {
+					$update_errors_list[$i + 2] = $validator->errors()->all();
+				}
+			}
+
+			$i++;
+			*/
+		}
+
+		$this->data = compact('registration_list');
+				$this->functionSubName = "確認";
+		$this->setFunctionName();
+
+
+		return view('tool.csvimport.confirm', $this->data);
+
+		exit;
 
 
 
 
 
-
-
+/*
 		$this->validate($request, $rules);
 
 		$user = new User();
@@ -128,6 +177,7 @@ class CsvimportController extends Controller {
 		$user->save();
 
 		return redirect()->route('user.index')->with('message', 'Item created successfully.');
+*/
 	}
 
     /**
@@ -169,8 +219,8 @@ class CsvimportController extends Controller {
     {
         // CSVヘッダとテーブルのカラムを関連付けておく
         $list = [
-            'content' => "内容",
-            'memo'    => "備考",
+            'parent_user_id' => "parent_user_id",
+            'child_user_id'    => "child_user_id",
         ];
 
         foreach ($list as $key => $value) {
@@ -187,7 +237,7 @@ class CsvimportController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show()
 	{
 		$user = User::findOrFail($id);
 
@@ -195,7 +245,7 @@ class CsvimportController extends Controller {
 		$this->functionSubName = "View";
 		$this->setFunctionName();
 
-		return view('tool.user.show', $this->data);
+		return view('tool.import.show', $this->data);
 	}
 
 	/**
