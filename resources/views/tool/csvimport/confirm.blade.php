@@ -23,11 +23,21 @@
     </div>
 	@endif
 
+    <div>登録対象レコード</div>
     <div class="row">
         <div class="col-md-12">
 			<?php foreach($registration_list as $val){ ?>
 			<div><?php var_dump($val); ?></div>
 			<?php } ?>
+        </div>
+    </div>
+
+    <div>既存レコード</div>
+    <div class="row">
+        <div class="col-md-12">
+            <?php foreach($exist_list as $val){ ?>
+            <div><?php var_dump($val); ?></div>
+            <?php } ?>
         </div>
     </div>
 @endsection

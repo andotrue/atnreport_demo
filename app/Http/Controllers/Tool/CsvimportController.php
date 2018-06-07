@@ -5,6 +5,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Store;
+use App\GroupTable;
 use App\Testmailaddress;
 use Illuminate\Http\Request;
 
@@ -102,17 +103,25 @@ class CsvimportController extends Controller {
             $column_names[] = $result;
         }
 
-        $registration_errors_list = [];
-        $update_errors_list       = [];
+        $registration_list = array();
+        $exist_list = array();
         $i = 0;
 		while ($row = fgetcsv($fp)) {
-	        //var_dump($row);
+	        //var_dump($row);exit;
 	        $registration_list[] = $row;
 
 			// Excelで編集されるのが多いと思うのでSJIS-win→UTF-8へエンコード
 			mb_convert_variables('UTF-8', 'SJIS-win', $row);
 
-
+			//$grouptable = GroupTable::findOrFail($row[0]);
+			$exist_cnt = GroupTable::where('parent_user_id','=',$row[0])->where('child_user_id','=',$row[1])->count();
+			if(!$exist_cnt){
+				//データがなければ登録
+				$registration_list[] = $row;
+			}else{
+				//データがあれば
+				$exist_list[] = $row;
+			}
 			/*
 			$is_registration_row = false;
 
@@ -149,8 +158,8 @@ class CsvimportController extends Controller {
 			*/
 		}
 
-		$this->data = compact('registration_list');
-				$this->functionSubName = "確認";
+		$this->data = compact('registration_list', 'exist_list');
+		$this->functionSubName = "確認";
 		$this->setFunctionName();
 
 
