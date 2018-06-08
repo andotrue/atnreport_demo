@@ -9,7 +9,6 @@
     <div class="page-header clearfix">
         <h1>
             <i class="glyphicon glyphicon-align-justify"></i>{{ $functionName }} {{ $functionSubName ? "-".$functionSubName."-" : "" }}
-            <a class="btn btn-success pull-right" href="{{ route('user.create') }}"><i class="glyphicon glyphicon-plus"></i> 作成</a>
         </h1>
     </div>
 @endsection
@@ -23,22 +22,51 @@
     </div>
 	@endif
 
-    <div>登録対象レコード</div>
     <div class="row">
-        <div class="col-md-12">
-			<?php foreach($registration_list as $val){ ?>
-			<div><?php var_dump($val); ?></div>
-			<?php } ?>
-        </div>
-    </div>
+        <p class="lead">以下でよろしければ登録ボタンと押してください。</p>
+        <form action="{{ route('csvimport.store') }}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-    <div>既存レコード</div>
-    <div class="row">
+        <div>登録対象レコード</div>
         <div class="col-md-12">
-            <?php foreach($exist_list as $val){ ?>
-            <div><?php var_dump($val); ?></div>
-            <?php } ?>
+            <table class="table">
+                <tr>
+                    <th>parent_user_id</td>
+                    <th>child_user_id</td>
+                </tr>
+			<?php foreach($registration_list as $val){ ?>
+                <tr>
+                    <td><?php echo $val[0]; ?></td>
+                    <td><?php echo $val[1]; ?></td>
+                    <input type="hidden" name="regist_list[]" value="<?php echo $val[0]; ?>">
+                </tr>
+			<?php } ?>
+            </table>
         </div>
+
+        <div>既存レコード</div>
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <th>parent_user_id</td>
+                    <th>child_user_id</td>
+                </tr>
+            <?php foreach($exist_list as $val){ ?>
+                <tr>
+                    <td><?php echo $val[0]; ?></td>
+                    <td><?php echo $val[1]; ?></td>
+                </tr>
+            <?php } ?>
+            </table>
+        </div>
+
+        <div class='col-md-12'>
+        <div class="well well-sm">
+            <button type="submit" class="btn btn-primary">登録</button>
+            <a class="btn btn-link pull-right" href="{{ route('csvimport.index') }}"><span class="glyphicon glyphicon-backward"></span> 戻る</a>
+        </div>
+
+        </form>
     </div>
 @endsection
 
