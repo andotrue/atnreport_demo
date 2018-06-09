@@ -75,6 +75,24 @@ class CsvimportController extends Controller {
 	 */
 	public function store(Request $request)
 	{
+	    if($request['action'] == "confirm"){
+	        $regist_list1 = $request['regist_list1'];
+	        $regist_list2 = $request['regist_list2'];
+
+	        $groupTable = new GroupTable;
+	        foreach($regist_list1 as $key => $val){
+	            \DB::table('group_table')->insert(
+	                ['parent_user_id' => $val, 'child_user_id' => $regist_list2[$key]]
+	                );
+	        }
+
+	        $this->functionSubName = "完了";
+	        $this->setFunctionName();
+	        return view('tool.csvimport.complate', $this->data);
+	        exit;
+	    }
+
+
 	    // アップロードファイルに対してのバリデート
         $validator = $this->validateUploadFile($request);
         if ($validator->fails() === true){
@@ -108,10 +126,8 @@ class CsvimportController extends Controller {
         $i = 0;
 		while ($row = fgetcsv($fp)) {
 	        //var_dump($row);exit;
-	        $registration_list[] = $row;
 
-			// Excelで編集されるのが多いと思うのでSJIS-win→UTF-8へエンコード
-			mb_convert_variables('UTF-8', 'SJIS-win', $row);
+		    //mb_convert_variables('UTF-8', 'SJIS-win', $row);// Excelで編集されるのが多いと思うのでSJIS-win→UTF-8へエンコード
 
 			//$grouptable = GroupTable::findOrFail($row[0]);
 			$exist_cnt = GroupTable::where('parent_user_id','=',$row[0])->where('child_user_id','=',$row[1])->count();
@@ -161,7 +177,6 @@ class CsvimportController extends Controller {
 		$this->data = compact('registration_list', 'exist_list');
 		$this->functionSubName = "確認";
 		$this->setFunctionName();
-
 
 		return view('tool.csvimport.confirm', $this->data);
 

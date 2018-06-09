@@ -23,9 +23,10 @@
 	@endif
 
     <div class="row">
-        <p class="lead">以下でよろしければ登録ボタンと押してください。</p>
+        <p class="lead">以下でよろしければ登録ボタンを押してください。</p>
         <form action="{{ route('csvimport.store') }}" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="action" value="confirm">
 
         <div>登録対象レコード</div>
         <div class="col-md-12">
@@ -37,8 +38,9 @@
 			<?php foreach($registration_list as $val){ ?>
                 <tr>
                     <td><?php echo $val[0]; ?></td>
+                    <input type="hidden" name="regist_list1[]" value="<?php echo $val[0]; ?>">
                     <td><?php echo $val[1]; ?></td>
-                    <input type="hidden" name="regist_list[]" value="<?php echo $val[0]; ?>">
+                    <input type="hidden" name="regist_list2[]" value="<?php echo $val[1]; ?>">
                 </tr>
 			<?php } ?>
             </table>
