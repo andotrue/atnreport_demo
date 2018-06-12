@@ -33,6 +33,7 @@ class CsvimportController extends Controller {
 	 */
 	public function index()
 	{
+		/*
 		if(\Auth::user()->role == "admin"){
 			$users = User::orderBy('id', 'asc')->paginate(25);
 		}
@@ -41,7 +42,7 @@ class CsvimportController extends Controller {
 		}
 		$stores = Store::orderBy('id')->pluck('storename','id');
 		//$testmailaddress = Testmailaddress::orderBy('id')->pluck('email','id');
-		//var_dump($testmailaddress);
+		*/
 
 		$this->data = compact('users','stores','testmailaddress');
 

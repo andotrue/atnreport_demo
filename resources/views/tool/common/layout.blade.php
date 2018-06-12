@@ -101,8 +101,8 @@
                     <li id="informationlink" class="{{ preg_match("/^\/tool\/csvinport*/", $_SERVER['REQUEST_URI'])? " active " : ""}}">
                     	<a href="/tool/csvimport">CSVインポート</a>
                     </li>
-                    <li id="informationlink" class="{{ preg_match("/^\/tool\/information*/", $_SERVER['REQUEST_URI'])? " active " : ""}}">
-                    	<a href="/tool/information">お知らせ管理</a>
+                    <li id="informationlink" class="{{ preg_match("/^\/tool\/grouptable*/", $_SERVER['REQUEST_URI'])? " active " : ""}}">
+                    	<a href="/tool/grouptable">ユーザグループ管理</a>
                     </li>
                     <li id="storelink" class="{{ preg_match("/^\/tool\/store*/", $_SERVER['REQUEST_URI'])? " active " : ""}}">
                     	<a href="/tool/store">施設管理</a>

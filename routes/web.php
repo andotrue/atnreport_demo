@@ -23,7 +23,10 @@ Route::group(['middleware' => 'auth.tool'], function()
 
     //CSVインポート
     Route::resource("tool/csvimport","Tool\CsvimportController");
+    //ユーザグループ管理
+    Route::resource("tool/grouptable","Tool\GrouptableController");
     
+
     //テストメールアドレス追加
     Route::post("tool/user/testmailaddress_add/","Tool\UserController@testmailaddress_add");
     //テストメールアドレス削除
