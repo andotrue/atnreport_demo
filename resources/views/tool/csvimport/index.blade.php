@@ -23,29 +23,26 @@
 	@endif
 
     <div class="row">
+    	<p class="lead">アップロードするファイルを選択してください。</p>
  		<form action="{{ route('csvimport.store') }}" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
         <div class="col-md-12">
-			<?php
-			$cnt = 1;//FILEアップローダフィールドの数
-			for($i=1; $i<=$cnt; $i++){
-			?>
+			<?php $i = "gt"; ?>
+			<input type="hidden" name="target" value="<?php echo $i; ?>">
 			<div class="form-group @if($errors->has("csvfile".$i)) has-error @endif">
-			   <label for="csvfile<?php echo $i; ?>-field">アップロードするファイルを選択してください。<span class="btn-xs btn-danger">必須</span></label>
+			   <label for="csvfile<?php echo $i; ?>-field">受講者(グループ管理登録用CSV)</label>
 			      <input type="file" name="csvfile<?php echo $i; ?>" id="filer_input<?php echo $i; ?>" multiple="multiple">
 			       @if($errors->has("csvfile".$i))
 			        <span class="help-block">{{ $errors->first("csvfile$i") }}</span>
 			       @endif
 			</div>
-			<?php } ?>
+			<div class="well well-sm">
+			    <button type="submit" class="btn btn-primary">アップロード</button>
+			</div>
         </div>
 
 		<div class='col-md-12'>
-			<div class="well well-sm">
-			    <button type="submit" class="btn btn-primary">アップロード</button>
-			    <a class="btn btn-link pull-right" href="{{ route('csvimport.index') }}"><span class="glyphicon glyphicon-backward"></span> 戻る</a>
-			</div>
 		</div>
 		</form>
 

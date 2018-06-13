@@ -76,6 +76,7 @@ class CsvimportController extends Controller {
 	 */
 	public function store(Request $request)
 	{
+		//#################################################################確認画面
 	    if($request['action'] == "confirm"){
 	        $regist_list1 = $request['regist_list1'];
 	        $regist_list2 = $request['regist_list2'];
@@ -94,14 +95,19 @@ class CsvimportController extends Controller {
 	    }
 
 
+		//#################################################################ファイルアップロード
+		if(!$request['target']){
+            return redirect('/tool/csvimport/')->with('error', 'パラメタエラー');
+		}
+		$target = "csvfile" . $request['target'];
 	    // アップロードファイルに対してのバリデート
-        $validator = $this->validateUploadFile($request);
+        $validator = $this->validateUploadFile($request, $target);
         if ($validator->fails() === true){
 			return redirect()->route('csvimport.index')->with('errors', $validator->errors());
         }
 
         // CSVファイルをサーバーに保存
-        $temporary_csv_file = $request->file('csvfile1')->store('csv');
+        $temporary_csv_file = $request->file($target)->store('csv');
 
         $fp = fopen(storage_path('app/') . $temporary_csv_file, 'r');
 
@@ -208,15 +214,15 @@ class CsvimportController extends Controller {
     /**
      * アップロードファイルのバリデート
      */
-    private function validateUploadFile(Request $request)
+    private function validateUploadFile(Request $request, $target)
     {
         return \Validator::make($request->all(), [
-                'csvfile1' => 'required|file|mimetypes:text/plain|mimes:csv,txt',
+                $target => 'required|file|mimetypes:text/plain|mimes:csv,txt',
             ], [
-                'csvfile1.required'  => 'ファイルを選択してください。',
-                'csvfile1.file'      => 'ファイルアップロードに失敗しました。',
-                'csvfile1.mimetypes' => 'ファイル形式が不正です。',
-                'csvfile1.mimes'     => 'ファイル拡張子が異なります。',
+                $target.'.required'  => 'ファイルを選択してください。',
+                $target.'.file'      => 'ファイルアップロードに失敗しました。',
+                $target.'.mimetypes' => 'ファイル形式が不正です。',
+                $target.'.mimes'     => 'ファイル拡張子が異なります。',
             ]
         );
     }
